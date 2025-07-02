@@ -24,8 +24,8 @@ Triad is a powerful, modular, and extensible toolkit for bug bounty hunters and 
 
 1. **Clone the repo:**
    ```bash
-   git clone https://github.com/LifeJiggy/triad.git
-   cd triad
+   git clone https://github.com/LifeJiggy/Script-Combo.git
+   cd Script-Combo
    ```
 
 2. **Install Python dependencies:**
