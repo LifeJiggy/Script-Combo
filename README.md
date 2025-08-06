@@ -66,20 +66,12 @@ python Triad.py
 
 ---
 
-## 🧩 Extending Triad
-
-- Add new sensitive patterns in `js_extract.js` or move to a JSON config for easy updates.
-- Add new DOM features by editing the `userFunctionalities` array.
-
----
-
 ## 📝 Output
 
 - All results are saved in the `output/` directory, organized by target and timestamp.
 - Each phase (recon, regex, enumerate, reflection, sinks, vulnerable, sanitization, characters) has its own JSON file.
 
 ---
-
 ## 🛡️ Disclaimer
 
 This tool is for educational and authorized security testing only.  
