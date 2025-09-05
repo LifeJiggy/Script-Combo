@@ -23,23 +23,23 @@ Triad is a powerful, modular, and extensible toolkit for bug bounty hunters and 
 ## 🛠️ Installation
 
 1. **Clone the repo:**
+
    ```bash
    git clone https://github.com/LifeJiggy/Script-Combo.git
    cd Script-Combo
    ```
 
 2. **Install Python dependencies:**
+
    ```bash
    pip install -r requirements.txt
    ```
 
 3. **Install Node.js dependencies:**
+
    ```bash
    npm install puppeteer puppeteer-extra puppeteer-extra-plugin-stealth node-fetch abort-controller
    ```
-
-4. **(Windows only)**:  
-   Install [Git Bash](https://gitforwindows.org/) for bash-based recon scripts.
 
 ---
 
@@ -72,6 +72,81 @@ python Triad.py
 - Each phase (recon, regex, enumerate, reflection, sinks, vulnerable, sanitization, characters) has its own JSON file.
 
 ---
+
+## 📖 JavaScript Extraction & Mapping (`js_extract.js`)
+
+`js_extract.js` is a Node.js script for advanced JavaScript and DOM analysis. It supports multiple modes for extracting sensitive data, mapping user-facing functionality, and testing for common web vulnerabilities.
+
+### Modes
+
+- **enumerate**: Deeply maps forms, inputs, endpoints, and user functionality in the DOM. Crawls links and outputs a comprehensive JSON map.
+- **regex**: Downloads and scans JavaScript files for sensitive data using advanced regex patterns. Outputs all findings to JSON.
+- **reflection**: Tests if user input is reflected in the DOM (potential XSS vectors).
+- **sinks**: Checks for the presence of dangerous JavaScript sinks (e.g., `eval`, `innerHTML`).
+- **vulnerable**: Attempts to detect XSS, SQLi, CSRF, and open redirect vulnerabilities by injecting payloads.
+- **sanitization**: Tests input fields for sanitization/encoding of special characters.
+- **characters**: Fuzzes input fields with special characters to find weak filters or bypasses.
+
+### Usage
+
+```bash
+node js_extract.js <url> <outputDir> <mode> [jsLinks] [headers] [userAgents] [crawlDepth] [threads] [delay] [loginCreds] [selections]
+```
+
+- `<url>`: Target URL to analyze
+- `<outputDir>`: Directory to save output JSON files
+- `<mode>`: One of `enumerate`, `regex`, `reflection`, `sinks`, `vulnerable`, `sanitization`, `characters`
+- `[jsLinks]`: (regex mode) Comma-separated JS URLs to scan
+- `[headers]`: JSON array of HTTP headers
+- `[userAgents]`: JSON array of user-agent strings
+- `[crawlDepth]`: Max number of links to crawl (default: 10)
+- `[threads]`: Number of concurrent fetches (default: 10)
+- `[delay]`: Delay between requests in seconds (default: 5)
+- `[loginCreds]`: JSON object with login credentials and/or proxy
+- `[selections]`: JSON array of selected functionalities (for advanced modes)
+
+#### Example: Enumerate DOM Functionality
+
+```bash
+node js_extract.js https://target.com ./output enumerate
+```
+
+#### Example: Extract Sensitive Data from JS Files
+
+```bash
+node js_extract.js https://target.com ./output regex "https://target.com/app.js,https://target.com/main.js"
+```
+
+#### Example: Reflection Testing
+
+```bash
+node js_extract.js https://target.com ./output reflection
+```
+
+### Output
+
+- **enumerate.json**: Map of all detected forms, inputs, endpoints, and user features.
+- **js_data.json**: All sensitive data findings from JS files (regex mode).
+- **reflection.json**: Reflected input findings.
+- **sinks.json**: Detected dangerous JS sinks.
+- **vulnerable.json**: Vulnerability findings (XSS, SQLi, CSRF, redirects).
+- **sanitization.json**: Input sanitization test results.
+- **characters.json**: Special character fuzzing results.
+- **error.log**: All errors and context for troubleshooting.
+
+### Extending Patterns
+
+- To add new sensitive data patterns, edit the `sensitivePatterns` array in `js_extract.js`.
+- To add new user functionality mappings, update the `userFunctionalities` array and DOM extraction logic.
+
+### Notes
+
+- Requires Node.js 14+ and Chrome/Chromium (handled by Puppeteer).
+- Supports proxies and authenticated sessions via `loginCreds`.
+- Robust error handling and logging for reliability.
+
+---
+
 ## 🛡️ Disclaimer
 
 This tool is for educational and authorized security testing only.  

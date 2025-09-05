@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import os
+import sys
 import subprocess
 import re
 import time
@@ -208,17 +209,11 @@ def validate_proxy(proxy, timeout=360):
         return False
 
 
-# Run Bash recon
+# Run Python recon (cross-platform)
 def run_recon(url, recon_types, output_dir, threads, delay, cookies, proxy, timeout=360, retry_count=5):
     print(colored(f"[*] Starting recon for {url}...", "yellow"))
-    bash_path = "bash"
-    if platform.system() == "Windows":
-        bash_path = r"C:\Program Files\Git\bin\bash.exe"
-        if not os.path.exists(bash_path):
-            print(colored("[!] Git Bash not found. Please install Git or adjust bash_path.", "red"))
-            return None
-    
-    cmd = [bash_path, "recon.sh", url, output_dir, ",".join(recon_types), str(threads), str(delay), cookies or "", proxy or ""]
+    domain = urlparse(url).netloc
+    cmd = [sys.executable, os.path.join(os.path.dirname(__file__), "recon.py"), domain, output_dir, ",".join(recon_types), str(threads), str(delay), cookies or "", proxy or ""]
     for attempt in range(retry_count):
         try:
             print(colored(f"[*] Recon attempt {attempt + 1}/{retry_count}...", "blue"))
